@@ -1,7 +1,7 @@
 # cEOS_2tier_spine_leaf
 
 
-![Two tier spine leaf topology](2 Tier Spine Leaf Architecture.drawio.png)
+![Two tier spine leaf topology](https://github.com/Marc-Gerald-Sahagun/cEOS_2tier_spine_leaf/blob/935bdb864702fb88b80361e97ba95f0f8bc8e913/2%20Tier%20Spine%20Leaf%20Architecture.drawio.png)
 
 ## Design
 - 2 spines (shared AS 65100) and 6 leaves (one AS each, 65101 to 65106)
