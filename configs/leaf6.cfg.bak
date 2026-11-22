@@ -1,0 +1,72 @@
+! Command: show running-config at line 1
+! device: leaf6 (cEOSLab, EOS-4.32.0F-36401836.4320F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$QfHboKBuTA1ElUL/$.2FI1//rlEKm2b7lHDuLv2GWxMNeEfEY6RobMak9tYM6myfJz14PPMrmq7OW1XGanFNQpzEPK11DHLS6HWilr1
+!
+dhcp server
+   subnet 10.10.4.0/28
+      range 10.10.4.3 10.10.4.14
+      default-gateway 10.10.4.2
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf6
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vlan 40
+!
+management api http-commands
+   no shutdown
+!
+interface Port-Channel10
+   description server bundle
+   switchport access vlan 40
+!
+interface Ethernet1
+   description to spine1
+   no switchport
+   ip address 10.1.1.11/31
+!
+interface Ethernet2
+   description to spine2
+   no switchport
+   ip address 10.1.2.11/31
+!
+interface Ethernet3
+   description to server
+   channel-group 10 mode active
+!
+interface Ethernet4
+   description to server
+   channel-group 10 mode active
+!
+interface Loopback0
+   ip address 10.0.1.6/32
+!
+interface Management0
+   ip address 10.0.20.106/24
+!
+interface Vlan40
+   ip address 10.10.4.2/28
+   dhcp server ipv4
+!
+ip routing
+!
+router bgp 65106
+   router-id 10.0.1.6
+   maximum-paths 2
+   neighbor 10.1.1.10 remote-as 65100
+   neighbor 10.1.2.10 remote-as 65100
+   network 10.0.1.6/32
+   network 10.10.4.0/28
+!
+end
