@@ -59,16 +59,16 @@ topology:
       group: server
       mgmt-ipv4: 10.0.20.109
       exec:
-        - ip link add bond0 type bond
-        - sh -c 'echo 802.3ad > /sys/class/net/bond0/bonding/mode'
-        - sh -c 'echo 100 > /sys/class/net/bond0/bonding/miimon'
-        - ip link set eth1 down
-        - ip link set eth2 down
-        - ip link set eth1 master bond0
-        - ip link set eth2 master bond0
-        - ip link set bond0 up
-        - ip route del default via 10.0.20.1 dev eth0
-        - udhcpc -i bond0
+        - ip link add bond0 type bond # create an empty bond named bond0
+        - sh -c 'echo 802.3ad > /sys/class/net/bond0/bonding/mode' # set the bond to LACP mode (must happen while the bond has no members)
+        - sh -c 'echo 100 > /sys/class/net/bond0/bonding/miimon' # detects if link has failed every 100 miliseconds 
+        - ip link set eth1 down # shutdown interface eth1 (must be done before a port can enter a bond)
+        - ip link set eth2 down # shutdown interface eth2 (must be done before a port can enter a bond)
+        - ip link set eth1 master bond0 # add eth1 to bond0
+        - ip link set eth2 master bond0 # add eth 2 to bond0
+        - ip link set bond0 up # brings bond0 interface up
+        - ip route del default via 10.0.20.1 dev eth0 # deletes the management gateway so the frabic gateway is the only default
+        - udhcpc -i bond0 # enables bond0 to receive IP address from DHCP server
     server2:
       kind: linux
       group: server
